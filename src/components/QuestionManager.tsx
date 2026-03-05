@@ -2660,7 +2660,11 @@ export default function QuestionManager({ questions, setQuestions, subjects, onR
                                                     )}
                                                     <div
                                                         style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', lineHeight: 1.6 }}
-                                                        dangerouslySetInnerHTML={{ __html: exhibit.content }}
+                                                        dangerouslySetInnerHTML={{
+                                                            __html: exhibit.content
+                                                                ? exhibit.content.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&nbsp;/g, ' ').replace(/&#160;/g, ' ')
+                                                                : ''
+                                                        }}
                                                     />
                                                 </div>
                                             ))}
@@ -2679,7 +2683,11 @@ export default function QuestionManager({ questions, setQuestions, subjects, onR
                                         <p style={{ fontWeight: 600, color: '#fdba74', marginBottom: '0.25rem', fontSize: '0.9rem' }}>Scenario Context:</p>
                                         <div
                                             style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', lineHeight: 1.6 }}
-                                            dangerouslySetInnerHTML={{ __html: q.scenario }}
+                                            dangerouslySetInnerHTML={{
+                                                __html: q.scenario
+                                                    ? q.scenario.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&nbsp;/g, ' ').replace(/&#160;/g, ' ')
+                                                    : ''
+                                            }}
                                         />
                                     </div>
                                 )}
@@ -2695,7 +2703,11 @@ export default function QuestionManager({ questions, setQuestions, subjects, onR
                                         <p style={{ fontWeight: 600, color: '#a5b4fc', marginBottom: '0.25rem', fontSize: '0.9rem' }}>Rationale:</p>
                                         <div
                                             style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', lineHeight: 1.6, whiteSpace: 'pre-wrap' }}
-                                            dangerouslySetInnerHTML={{ __html: q.rationale }}
+                                            dangerouslySetInnerHTML={{
+                                                __html: q.rationale
+                                                    ? q.rationale.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&nbsp;/g, ' ').replace(/&#160;/g, ' ')
+                                                    : ''
+                                            }}
                                         />
                                     </div>
                                 )}

@@ -3,12 +3,14 @@ import { Question, Blog, Subject } from '@/types';
 
 interface DashboardStatsProps {
     questions: Question[];
+    questionCount?: number; // Optional override for total count (used when questions aren't fully loaded)
     blogs: Blog[];
     subjects: Subject[];
     studentCount: number;
 }
 
-export default function DashboardStats({ questions, blogs, subjects, studentCount }: DashboardStatsProps) {
+export default function DashboardStats({ questions, questionCount, blogs, subjects, studentCount }: DashboardStatsProps) {
+    const totalQuestionsDisplay = questionCount ?? questions.length;
     const [currentTime, setCurrentTime] = useState(new Date());
     const [isMounted, setIsMounted] = useState(false);
 
@@ -21,7 +23,7 @@ export default function DashboardStats({ questions, blogs, subjects, studentCoun
     const stats = [
         {
             label: 'Total Questions',
-            value: questions.length,
+            value: totalQuestionsDisplay,
             trend: '+12% this week',
             color: '#818cf8',
             gradient: 'linear-gradient(135deg, #6366f1 0%, #818cf8 100%)',

@@ -1464,9 +1464,13 @@ export default function StudentPortal() {
                                                 fontSize: '0.9rem',
                                                 lineHeight: '1.6',
                                                 whiteSpace: 'pre-wrap'
-                                            }}>
-                                                {examState.questions[examState.currentQuestionIndex]?.exhibits?.[0]?.content || 'No content available'}
-                                            </div>
+                                            }}
+                                                dangerouslySetInnerHTML={{
+                                                    __html: examState.questions[examState.currentQuestionIndex]?.exhibits?.[0]?.content
+                                                        ? String(examState.questions[examState.currentQuestionIndex]?.exhibits?.[0]?.content).replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&nbsp;/g, ' ').replace(/&#160;/g, ' ')
+                                                        : 'No content available'
+                                                }}
+                                            />
                                         </div>
                                     )}
 
@@ -1515,7 +1519,7 @@ export default function StudentPortal() {
                                         const currentQuestion = examState.questions[examState.currentQuestionIndex];
                                         const userAnswer = examState.answers[currentQuestion?.id];
                                         const isCorrect = currentQuestion?.correctOptions?.includes(idx);
-                                        const showFeedback = examState.mode === 'practice' && userAnswer !== undefined;
+                                        const showFeedback = userAnswer !== undefined;
 
                                         return (
                                             <div
@@ -1551,7 +1555,7 @@ export default function StudentPortal() {
                                 </div>
                             </div>
 
-                            {(examState.mode === 'practice' || examState.answers[examState.questions[examState.currentQuestionIndex]?.id] !== undefined) && (
+                            {examState.answers[examState.questions[examState.currentQuestionIndex]?.id] !== undefined && (
                                 <aside className={styles.explanationPanel}>
                                     <h3 className={styles.explanationTitle}>Detailed Explanation</h3>
 
@@ -1623,7 +1627,9 @@ export default function StudentPortal() {
                                                     border: '1px solid #e2e8f0'
                                                 }}
                                                 dangerouslySetInnerHTML={{
-                                                    __html: examState.questions[examState.currentQuestionIndex]?.rationale || ''
+                                                    __html: examState.questions[examState.currentQuestionIndex]?.rationale
+                                                        ? String(examState.questions[examState.currentQuestionIndex]?.rationale).replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&nbsp;/g, ' ').replace(/&#160;/g, ' ')
+                                                        : ''
                                                 }}
                                             />
                                         </div>
@@ -1643,7 +1649,9 @@ export default function StudentPortal() {
                                             <div
                                                 style={{ fontSize: '0.85rem', color: '#166534', lineHeight: '1.6' }}
                                                 dangerouslySetInnerHTML={{
-                                                    __html: examState.questions[examState.currentQuestionIndex]?.scenario || ''
+                                                    __html: examState.questions[examState.currentQuestionIndex]?.scenario
+                                                        ? String(examState.questions[examState.currentQuestionIndex]?.scenario).replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&nbsp;/g, ' ').replace(/&#160;/g, ' ')
+                                                        : ''
                                                 }}
                                             />
                                         </div>

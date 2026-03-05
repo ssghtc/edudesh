@@ -56,16 +56,24 @@ export default function ExhibitModal({ content, isOpen, onClose }: ExhibitModalP
                         ×
                     </button>
                 </div>
-                <div style={{
-                    padding: '2rem',
-                    overflowY: 'auto',
-                    lineHeight: 1.6,
-                    color: '#334155'
-                }}>
-                    {content.split('\n').map((para, i) => (
-                        <p key={i} style={{ marginBottom: '1rem' }}>{para}</p>
-                    ))}
-                </div>
+                <div
+                    style={{
+                        padding: '2rem',
+                        overflowY: 'auto',
+                        lineHeight: 1.6,
+                        color: '#334155'
+                    }}
+                    dangerouslySetInnerHTML={{
+                        __html: content
+                            .replace(/&lt;/g, '<')
+                            .replace(/&gt;/g, '>')
+                            .replace(/&amp;/g, '&')
+                            .replace(/&quot;/g, '"')
+                            .replace(/&#39;/g, "'")
+                            .replace(/&nbsp;/g, ' ')
+                            .replace(/&#160;/g, ' ')
+                    }}
+                />
                 <div style={{
                     padding: '1rem',
                     borderTop: '1px solid #e2e8f0',

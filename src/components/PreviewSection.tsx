@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Question, Blog, DiagramElement } from '@/types';
 import OrderingQuestion from './QuestionTypes/OrderingQuestion';
 import InputQuestion from './QuestionTypes/InputQuestion';
-import ExhibitModal from './QuestionTypes/ExhibitModal';
+import RevealAnswer from './QuestionTypes/RevealAnswer';
 
 interface PreviewSectionProps {
     questions: Question[];
@@ -16,10 +16,6 @@ export default function PreviewSection({ questions, blogs }: PreviewSectionProps
     const [matrixAnswers, setMatrixAnswers] = useState<Record<string, Record<string, string>>>({});
     const [orderingAnswers, setOrderingAnswers] = useState<Record<string, string[]>>({});
     const [inputAnswers, setInputAnswers] = useState<Record<string, string>>({});
-
-    // Exhibit state
-    const [isExhibitOpen, setIsExhibitOpen] = useState(false);
-    const [activeExhibitContent, setActiveExhibitContent] = useState('');
 
     const handleDiagramAnswer = (questionId: string, elementId: string, value: string) => {
         setDiagramAnswers(prev => ({
@@ -65,18 +61,8 @@ export default function PreviewSection({ questions, blogs }: PreviewSectionProps
         }));
     };
 
-    const openExhibit = (content: string) => {
-        setActiveExhibitContent(content);
-        setIsExhibitOpen(true);
-    };
-
     return (
         <div style={{ padding: '2rem', maxWidth: '900px', margin: '0 auto' }}>
-            <ExhibitModal
-                isOpen={isExhibitOpen}
-                onClose={() => setIsExhibitOpen(false)}
-                content={activeExhibitContent}
-            />
 
             <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
                 <h2 style={{ fontSize: '2rem', marginBottom: '1rem', fontWeight: 'bold' }}>Student View Preview</h2>
@@ -133,26 +119,6 @@ export default function PreviewSection({ questions, blogs }: PreviewSectionProps
                                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1.5rem' }}>
                                     <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
                                         <span style={{ fontWeight: 600, color: '#64748b' }}>Question {i + 1}</span>
-                                        {q.exhibitContent && (
-                                            <button
-                                                onClick={() => openExhibit(q.exhibitContent!)}
-                                                style={{
-                                                    padding: '0.25rem 0.75rem',
-                                                    background: '#0ea5e9',
-                                                    color: 'white',
-                                                    border: 'none',
-                                                    borderRadius: '4px',
-                                                    cursor: 'pointer',
-                                                    fontSize: '0.8rem',
-                                                    fontWeight: 600,
-                                                    display: 'flex',
-                                                    alignItems: 'center',
-                                                    gap: '0.25rem'
-                                                }}
-                                            >
-                                                📄 Show Exhibit
-                                            </button>
-                                        )}
                                     </div>
                                     <span style={{
                                         fontSize: '0.75rem',
@@ -420,6 +386,12 @@ export default function PreviewSection({ questions, blogs }: PreviewSectionProps
                                         ))}
                                     </div>
                                 )}
+
+                                <RevealAnswer
+                                    rationale={q.rationale}
+                                    exhibits={q.exhibits}
+                                    exhibitContent={q.exhibitContent}
+                                />
                             </div>
                         ))
                     )}
