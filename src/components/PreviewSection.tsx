@@ -397,7 +397,7 @@ export default function PreviewSection({ questions, blogs }: PreviewSectionProps
                     )}
                 </div>
             ) : (
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '3rem' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '4rem' }}>
                     {blogs.length === 0 ? (
                         <p style={{ textAlign: 'center', color: 'var(--text-secondary)' }}>No blogs available.</p>
                     ) : (
@@ -405,22 +405,33 @@ export default function PreviewSection({ questions, blogs }: PreviewSectionProps
                             <article key={blog.id} style={{
                                 background: 'white',
                                 color: '#1e293b',
-                                padding: '3rem',
-                                borderRadius: '2px',
-                                boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+                                borderRadius: '12px',
+                                overflow: 'hidden',
+                                boxShadow: '0 10px 25px rgba(0, 0, 0, 0.05)'
                             }}>
-                                <header style={{ marginBottom: '2rem', borderBottom: '1px solid #e2e8f0', paddingBottom: '1rem' }}>
-                                    <h1 style={{ fontSize: '2.5rem', fontWeight: 800, marginBottom: '0.5rem', lineHeight: 1.2 }}>{blog.title}</h1>
-                                    <div style={{ display: 'flex', gap: '1rem', color: '#64748b', fontSize: '0.9rem' }}>
-                                        <span>By {blog.author}</span>
-                                        <span>•</span>
-                                        <span>{blog.date}</span>
+                                {blog.image_url && (
+                                    <div style={{ width: '100%', height: '400px', overflow: 'hidden' }}>
+                                        <img src={blog.image_url} alt={blog.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                                     </div>
-                                </header>
-                                <div style={{ lineHeight: 1.8, fontSize: '1.1rem', color: '#334155' }}>
-                                    {blog.content.split('\n').map((para, i) => (
-                                        <p key={i} style={{ marginBottom: '1.5rem' }}>{para}</p>
-                                    ))}
+                                )}
+                                <div style={{ padding: '3.5rem' }}>
+                                    <header style={{ marginBottom: '2.5rem', borderBottom: '1px solid #f1f5f9', paddingBottom: '1.5rem' }}>
+                                        <h1 style={{ fontSize: '2.8rem', fontWeight: 850, marginBottom: '0.75rem', lineHeight: 1.1, color: '#0f172a' }}>{blog.title}</h1>
+                                        <div style={{ display: 'flex', gap: '1rem', color: '#64748b', fontSize: '1rem', fontWeight: 500 }}>
+                                            <span>By {blog.author}</span>
+                                            <span>•</span>
+                                            <span>{blog.date}</span>
+                                        </div>
+                                    </header>
+                                    <div style={{ lineHeight: 1.8, fontSize: '1.2rem', color: '#334155' }}>
+                                        {blog.content.split('\n').map((line, i) => {
+                                            if (line.trim().startsWith('![Image](')) {
+                                                const imgUrl = line.match(/\((.*?)\)/)?.[1];
+                                                return imgUrl ? <img key={i} src={imgUrl} style={{ width: '100%', borderRadius: '12px', margin: '2.5rem 0', boxShadow: '0 5px 15px rgba(0,0,0,0.1)' }} alt="" /> : null;
+                                            }
+                                            return line.trim() ? <p key={i} style={{ marginBottom: '1.8rem' }}>{line}</p> : null;
+                                        })}
+                                    </div>
                                 </div>
                             </article>
                         ))

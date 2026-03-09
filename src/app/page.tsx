@@ -62,7 +62,8 @@ export default function Home() {
       // Blogs (usually small dataset)
       const { data: blogsData, error: blogsError } = await supabase
         .from('blogs')
-        .select('*');
+        .select('*')
+        .order('created_at', { ascending: false });
       if (!blogsError && blogsData) setBlogs(blogsData);
 
     } catch (err) {
@@ -101,7 +102,7 @@ export default function Home() {
   // Cursor-based pagination using id — avoids OFFSET timeout on large tables
   const fetchAllQuestions = async () => {
     setQuestionsLoading(true);
-    const PAGE_SIZE = 500; // Small batches to stay within 5s Supabase timeout
+    const PAGE_SIZE = 100; // Reduced from 500 to prevent network timeouts on large JSONB payloads
     const all: Question[] = [];
     let lastId: string | null = null;
     let hasMore = true;
@@ -122,25 +123,29 @@ export default function Home() {
         const { data, error } = await query;
 
         if (error) {
-          console.error('Error fetching questions batch:', JSON.stringify(error));
-          break;
+          console.error('❌ Supabase fetch error at batch', all.length, ':', error);
+          throw error;
         }
 
         if (data && data.length > 0) {
           all.push(...data.map(formatQuestion));
           lastId = data[data.length - 1].id;
           hasMore = data.length === PAGE_SIZE;
+          console.log(`⏳ Loaded ${all.length} questions...`);
+
+          // Optional: Tiny delay to keep network pipe breathing
+          await new Promise(r => setTimeout(r, 50));
         } else {
           hasMore = false;
         }
       }
 
-      console.log(`✅ Loaded ${all.length} questions`);
+      console.log(`✅ Success! Loaded ${all.length} total questions`);
       setQuestions(all);
       setQuestionCount(all.length);
       setQuestionsLoaded(true);
     } catch (err) {
-      console.error('Unexpected error loading questions:', err);
+      console.error('🛑 Unexpected failure in all-question fetch:', err);
     } finally {
       setQuestionsLoading(false);
     }

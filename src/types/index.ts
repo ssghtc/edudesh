@@ -166,6 +166,7 @@ export interface Blog {
     content: string;
     author: string;
     date: string;
+    image_url?: string;
 }
 
 export interface Student {
